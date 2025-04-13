@@ -1,32 +1,70 @@
-# Prerequisites
-*.d
+#include <iostream>
+using namespace std;
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+class Car {
+public:
+    int id;
+    const char* brand;
+    const char* model;
+    int year;
 
-# Precompiled Headers
-*.gch
-*.pch
+    Car(int _id, const char* _brand, const char* _model, int _year) {
+        id = _id;
+        brand = _brand;
+        model = _model;
+        year = _year;
+    }
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+    void show() {
+        cout << "ID: " << id << endl;
+        cout << "Brand: " << brand << endl;
+        cout << "Model: " << model << endl;
+        cout << "Year: " << year << endl;
+    }
+};
 
-# Fortran module files
-*.mod
-*.smod
+class CarGallery {
+public:
+    Car* cars[100];
+    int count = 0;
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+    void addCar(Car* car) {
+        cars[count++] = car;
+    }
 
-# Executables
-*.exe
-*.out
-*.app
+    void sell() {
+        int id;
+        cout << "Enter ID to sell: ";
+        cin >> id;
+
+        for (int i = 0; i < count; i++) {
+            if (cars[i]->id == id) {
+                delete cars[i];
+                cars[i] = cars[count - 1];
+                count--;
+                cout << "Car sold.\n";
+                return;
+            }
+        }
+        cout << "Car not found.\n";
+    }
+
+    void showAll() {
+        if (count == 0) cout << "No cars.\n";
+        else for (int i = 0; i < count; i++) cars[i]->show();
+    }
+};
+void main() {
+    CarGallery gallery;
+
+    gallery.addCar(new Car(1, "BMW", "X5", 2020));
+    gallery.addCar(new Car(2, "Audi", "A4", 2018));
+    gallery.addCar(new Car(3, "Mercedes", "C200", 2021));
+
+    gallery.showAll();
+
+    gallery.sell();
+
+    gallery.showAll();
+
+}
